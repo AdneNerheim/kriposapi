@@ -42,7 +42,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> getUserPin(string email)
     {
-        var pin = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE email = {email}").ToListAsync();
+        var pin = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE email = '{email}'").ToListAsync();
         return pin;
     }
 
