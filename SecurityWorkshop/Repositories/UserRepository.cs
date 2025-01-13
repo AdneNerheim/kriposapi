@@ -48,9 +48,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUser(string email, string password)
     {
-        _logger.LogError($"SELECT * FROM dbo.users WHERE Email = {email} AND Password = {password}");
-        List<User> users = await _context.User
-            .FromSqlRaw($"SELECT * FROM dbo.users WHERE Email = {email} AND Password = {password}")
+        List<User> users = await _context.User.Where(x => x.email == email && x.password==password)
             .ToListAsync();
 
         if (users.Count == 0)
