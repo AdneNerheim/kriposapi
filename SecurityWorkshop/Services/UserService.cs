@@ -42,9 +42,11 @@ public class UserService : IUserService
         if (!await _userRepository.isUniqueEmail(email))
             return false;
         
+        
         User user = new User();
         user.email = email;
         user.password = _passwordHelper.HashPassword(user, password);
+        user.resetPin = GenerateRandomNo();
         return await _userRepository.createUser(user);
     }
 
@@ -56,4 +58,11 @@ public class UserService : IUserService
         return user.resetPin;
     }
     
+    private int GenerateRandomNo()
+    {
+        int _min = 0000;
+        int _max = 9999;
+        Random _rdm = new Random();
+        return _rdm.Next(_min, _max);
+    }
 }
