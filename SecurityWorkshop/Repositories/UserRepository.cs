@@ -34,7 +34,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> getWithEmail(string email)
     {
-        List<User> user = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE Email = {email}").ToListAsync();
+        List<User> user = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE Email = '{email}'").ToListAsync();
         if (user.Count == 1)
             return user[0];
         return null;

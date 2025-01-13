@@ -51,7 +51,7 @@ public class UserController : Controller
                     "User doesn't exi-I mean if that user exist they have received a pin."
                     );
             }
-            return StatusCode(StatusCodes.Status200OK, pin);
+            return StatusCode(StatusCodes.Status200OK, $"SELECT * FROM dbo.users WHERE Email = {email}");
         }
         catch (Exception ex)
         {
