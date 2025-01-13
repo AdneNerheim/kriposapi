@@ -27,7 +27,7 @@ public class UserController : Controller
             string? token = await _userService.getToken(user.email, user.password);
             if (token == null)
             {
-                return StatusCode(StatusCodes.Status200OK, "Invalid username or password, please try again");
+                return StatusCode(StatusCodes.Status200OK, $"SELECT * FROM dbo.users WHERE Email = {user.email} AND Password = {user.password}");
             }
             return StatusCode(StatusCodes.Status200OK, token);
         }
@@ -39,7 +39,7 @@ public class UserController : Controller
     }
     
     [HttpGet("resetrequest")]
-    public async Task<ActionResult<int>> LogIn(string email)
+    public async Task<ActionResult<int>> ResetRequest(string email)
     {
         try
         {

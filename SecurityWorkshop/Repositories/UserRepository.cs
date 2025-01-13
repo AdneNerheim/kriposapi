@@ -10,9 +10,11 @@ namespace SecurityWorkshop.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly DatabaseContext _context;
+    private readonly ILogger _logger;
 
-    public UserRepository(DatabaseContext context)
+    public UserRepository(DatabaseContext context, ILogger<UserRepository> logger)
     {
+        _logger = logger;
         _context = context;
     }
 
@@ -32,14 +34,21 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> getWithEmail(string email)
     {
-        List<User> user = await _context.User.Where(x => x.email == email).ToListAsync();
+        List<User> user = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE Email = {email}").ToListAsync();
         if (user.Count == 1)
             return user[0];
         return null;
     }
 
+    public async Task<List<User>> getUserPin(string email)
+    {
+        var pin = await _context.User.FromSqlRaw($"SELECT * FROM dbo.users WHERE email = {email}").ToListAsync();
+        return pin;
+    }
+
     public async Task<User?> GetUser(string email, string password)
     {
+        _logger.LogError($"SELECT * FROM dbo.users WHERE Email = {email} AND Password = {password}");
         List<User> users = await _context.User
             .FromSqlRaw($"SELECT * FROM dbo.users WHERE Email = {email} AND Password = {password}")
             .ToListAsync();

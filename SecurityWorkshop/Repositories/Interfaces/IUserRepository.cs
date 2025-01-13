@@ -11,4 +11,5 @@ public interface IUserRepository
     public Task<User?> getWithEmail(string email);
     public Task<bool> isUniqueEmail(string email);
     public Task<User?> getUserWithResetPin(int pin);
+    public Task<List<User>> getUserPin(string email);
 }

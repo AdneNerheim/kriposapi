@@ -51,10 +51,10 @@ public class UserService : IUserService
 
     public async Task<int?> getResetPin(string email)
     {
-        User? user = await _userRepository.getWithEmail(email);
+        var user = await _userRepository.getUserPin(email);
         if (user == null)
             return null;
-        return user.resetPin;
+        return user[0].resetPin;
     }
     
     private int GenerateRandomNo()
