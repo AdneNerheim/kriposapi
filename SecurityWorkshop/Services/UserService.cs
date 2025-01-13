@@ -27,10 +27,10 @@ public class UserService : IUserService
         return tokenManager.getToken();
     }
 
-    public async Task<bool> resetPassword(int pin, string newPassword)
+    public async Task<bool> resetPassword(string email, int pin, string newPassword)
     {
-        User? user = await _userRepository.getUserWithResetPin(pin);
-        if (user == null)
+        User? user = await _userRepository.getWithEmail(email);
+        if (user == null || user.resetPin != pin)
             return false;
 
         user.password = _passwordHelper.HashPassword(user, newPassword);
@@ -41,7 +41,6 @@ public class UserService : IUserService
     {
         if (!await _userRepository.isUniqueEmail(email))
             return false;
-        
         
         User user = new User();
         user.email = email;

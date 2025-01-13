@@ -19,12 +19,12 @@ public class UserController : Controller
         _logger = logger;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<string>> LogIn(string email, string password)
+    [HttpPost]
+    public async Task<ActionResult<string>> LogIn([FromBody] UserLogin user)
     {
         try
         {
-            string? token = await _userService.getToken(email, password);
+            string? token = await _userService.getToken(user.email, user.password);
             if (token == null)
             {
                 return StatusCode(StatusCodes.Status200OK, "Invalid username or password, please try again");
@@ -63,11 +63,11 @@ public class UserController : Controller
     
     
     [HttpPut]
-    public async Task<ActionResult<bool>> ResetPassword(int pin, string newPassword)
+    public async Task<ActionResult<bool>> ResetPassword(int pin, string email, string newPassword)
     {
         try
         {
-            bool success = await _userService.resetPassword(pin, newPassword);
+            bool success = await _userService.resetPassword(email, pin, newPassword);
             return Ok(success);
 
         }
@@ -78,12 +78,12 @@ public class UserController : Controller
         }
     }
     
-    [HttpPost]
-    public async Task<ActionResult<bool>> CreateUser(string email, string password)
+    [HttpPost("create")]
+    public async Task<ActionResult<bool>> CreateUser([FromBody] UserLogin user)
     {
         try
         {
-            bool success = await _userService.createUser(email, password);
+            bool success = await _userService.createUser(user.email, user.password);
             if (success)
                 return Created();
             return Ok(success);
