@@ -9,13 +9,11 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHelper _passwordHelper;
-    private readonly ILogger _logger;
 
-    public UserService(IUserRepository userRepository, IPasswordHelper passwordHelper, ILogger<UserService> logger)
+    public UserService(IUserRepository userRepository, IPasswordHelper passwordHelper)
     {
         _userRepository = userRepository;
         _passwordHelper = passwordHelper;
-        _logger = logger;
     }
 
     public async Task<string?> getToken(string email, string password)
@@ -52,7 +50,7 @@ public class UserService : IUserService
     public async Task<int?> getResetPin(string email)
     {
         var user = await _userRepository.getUserPin(email);
-        if (user == null)
+        if (user.Count != 1)
             return null;
         return user[0].resetPin;
     }
