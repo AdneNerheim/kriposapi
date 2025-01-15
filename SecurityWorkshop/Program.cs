@@ -27,8 +27,22 @@ builder.Services.AddScoped<ITopSecretService, TopSecretService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin() 
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
 
+
+var app = builder.Build();
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
